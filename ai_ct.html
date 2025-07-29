@@ -1,25 +1,138 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>스마트 라이프 어시스턴트 – 실생활 속 상황에 맞는 AI 행동 추천 시스템</title>
   <style>
     body { font-family: Arial, sans-serif; line-height: 1.6; }
-    .container { max-width: 1000px; margin: auto; padding: 20px; }
-    .tabs { display: flex; margin-bottom: 10px; flex-wrap: wrap; }
-    .tab { padding: 10px 20px; border: 1px solid #ccc; cursor: pointer; }
-    .tab.active { background-color: #eef; font-weight: bold; }
-    .tab-content { display: none; border: 1px solid #ccc; padding: 20px; background-color: #f9f9f9; }
-    .tab-content.active { display: block; }
-    .input-box { margin-top: 15px; }
-    textarea, input[type=text], select {width: 100%;max-width: 100%;padding: 5px;margin-top: 5px;box-sizing: border-box;}
-    .feedback { margin-top: 10px; font-weight: bold; color: #003366; }
-    pre.code { background-color: #eee; padding: 10px; font-family: monospace; white-space: pre-wrap; }
-    .summary { background-color: #eef; padding: 10px; margin-top: 10px; white-space: pre-wrap; border-left: 4px solid #99c; }
-    .problem-box { background-color: #fff7e6; border-left: 5px solid #ff9900; padding: 15px; margin-top: 20px; margin-bottom: 20px; border-radius: 8px; font-size: 16px; line-height: 1.6;}
-    #algorithm {max-height: 400px;overflow-y: auto; padding-right: 10px;}
-    #algorithmInputs {max-height: 300px;overflow-y: auto;padding-right: 10px;margin-top: 10px;background-color: #fafafa;border: 1px solid #ddd;border-radius: 8px;}
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      flex: 1 1 auto;
+      text-align: center;
+    }
+
+    .tab.active {
+      background-color: #eef;
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+      border: 1px solid #ccc;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .input-box {
+      margin-top: 15px;
+    }
+
+    textarea,
+    input[type=text],
+    select {
+      width: 100%;
+      max-width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #003366;
+    }
+
+    pre.code {
+      background-color: #eee;
+      padding: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+
+    .summary {
+      background-color: #eef;
+      padding: 10px;
+      margin-top: 10px;
+      white-space: pre-wrap;
+      border-left: 4px solid #99c;
+    }
+
+    .problem-box {
+      background-color: #fff7e6;
+      border-left: 5px solid #ff9900;
+      padding: 15px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    #algorithm {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    #algorithmInputs {
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-top: 10px;
+      background-color: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    /* ✅ 모바일 반응형 스타일 추가 */
+    @media screen and (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+      }
+
+      .tab {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .tab-content {
+        padding: 15px;
+      }
+
+      .problem-box {
+        font-size: 15px;
+      }
+
+      #algorithm, #algorithmInputs {
+        max-height: none;
+        overflow-y: visible;
+      }
+    }
   </style>
+
 </head>
 <body>
   <div class="container">

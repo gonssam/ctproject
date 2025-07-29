@@ -1,29 +1,169 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>꿀벌의 꿀 모으기 - CT 사고 과정</title>
   <style>
     body { font-family: Arial, sans-serif; line-height: 1.6; }
-    .container { max-width: 1000px; margin: auto; padding: 20px; }
-    .tabs { display: flex; margin-bottom: 10px; }
-    .tab { padding: 10px 20px; border: 1px solid #ccc; cursor: pointer; }
-    .tab.active { background-color: #eef; font-weight: bold; }
-    .tab-content { display: none; border: 1px solid #ccc; padding: 20px; background-color: #f9f9f9; }
-    .tab-content.active { display: block; }
-    .input-box { margin: 10px 0; }
-    .grid-wrapper { display: flex; flex-direction: column; margin-top: 20px; }
-    .grid-row { display: flex; align-items: center; margin-bottom: 5px; }
-    .start-index { width: 50px; text-align: right; margin-right: 5px; font-weight: bold; color: #555; }
-    .grid { display: grid; grid-template-columns: repeat(4, 80px); grid-gap: 5px; }
-    .cell { width: 80px; height: 80px; text-align: center; line-height: 80px; border: 1px solid #999; font-size: 16px; position: relative; }
-    .choice-section { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background-color: #eef; }
-    .choice-section label { margin-right: 10px; }
-    .example-grid { margin-top: 15px; }
-    .pattern-grid { display: grid; grid-template-columns: repeat(5, 80px); grid-gap: 5px; margin-bottom: 10px; }
-    .pattern-cell { width: 80px; height: 80px; border: 1px solid #aaa; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-    .feedback { margin-top: 10px; font-weight: bold; color: #003366; }
+
+    .container {
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      flex: 1 1 auto;
+      text-align: center;
+    }
+
+    .tab.active {
+      background-color: #eef;
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+      border: 1px solid #ccc;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .input-box {
+      margin: 10px 0;
+    }
+
+    .grid-wrapper {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    .grid-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .start-index {
+      width: 50px;
+      text-align: right;
+      margin-right: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      grid-gap: 5px;
+    }
+
+    .cell {
+      width: 80px;
+      height: 80px;
+      text-align: center;
+      line-height: 80px;
+      border: 1px solid #999;
+      font-size: 16px;
+      position: relative;
+    }
+
+    .choice-section {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #eef;
+    }
+
+    .choice-section label {
+      margin-right: 10px;
+    }
+
+    .example-grid {
+      margin-top: 15px;
+    }
+
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      grid-gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .pattern-cell {
+      width: 80px;
+      height: 80px;
+      border: 1px solid #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #003366;
+    }
+
+    textarea,
+    input[type=text],
+    select {
+      width: 100%;
+      max-width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    /* ✅ 모바일 반응형 스타일 추가 */
+    @media screen and (max-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 80px);
+      }
+
+      .pattern-grid {
+        grid-template-columns: repeat(3, 80px);
+      }
+
+      .tab {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .tab-content {
+        padding: 15px;
+      }
+
+      .cell, .pattern-cell {
+        width: 60px;
+        height: 60px;
+        font-size: 14px;
+        line-height: 60px;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+    }
   </style>
+
 </head>
 <body>
   <div class="container">
