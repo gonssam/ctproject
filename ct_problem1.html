@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>꿀벌의 꿀 모으기 - CT 사고 과정</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; }
+    .container { max-width: 1000px; margin: auto; padding: 20px; }
+    .tabs { display: flex; margin-bottom: 10px; }
+    .tab { padding: 10px 20px; border: 1px solid #ccc; cursor: pointer; }
+    .tab.active { background-color: #eef; font-weight: bold; }
+    .tab-content { display: none; border: 1px solid #ccc; padding: 20px; background-color: #f9f9f9; }
+    .tab-content.active { display: block; }
+    .input-box { margin: 10px 0; }
+    .grid-wrapper { display: flex; flex-direction: column; margin-top: 20px; }
+    .grid-row { display: flex; align-items: center; margin-bottom: 5px; }
+    .start-index { width: 50px; text-align: right; margin-right: 5px; font-weight: bold; color: #555; }
+    .grid { display: grid; grid-template-columns: repeat(4, 80px); grid-gap: 5px; }
+    .cell { width: 80px; height: 80px; text-align: center; line-height: 80px; border: 1px solid #999; font-size: 16px; position: relative; }
+    .choice-section { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background-color: #eef; }
+    .choice-section label { margin-right: 10px; }
+    .example-grid { margin-top: 15px; }
+    .pattern-grid { display: grid; grid-template-columns: repeat(5, 80px); grid-gap: 5px; margin-bottom: 10px; }
+    .pattern-cell { width: 80px; height: 80px; border: 1px solid #aaa; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .feedback { margin-top: 10px; font-weight: bold; color: #003366; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>꿀벌의 꿀 모으기 - 컴퓨팅 사고 과정</h1>
+    <div class="tabs">
+      <div class="tab active" data-tab="decompose">1. 문제 분해</div>
+      <div class="tab" data-tab="abstraction">2. 추상화</div>
+      <div class="tab" data-tab="pattern">3. 패턴 인식</div>
+      <div class="tab" data-tab="algorithm">4. 알고리즘 적용</div>
+    </div>
+
+    <!-- 문제 분해 -->
+    <div id="decompose" class="tab-content active">
+      <h3>문제 분해 단계</h3>
+      <p>꿀벌은 꽃밭을 돌아다니며 꿀을 모아야 합니다. 꽃을 지나가면 꿀을 모을 수 있고 꿀벌은 아직 출발하지 않았습니다.<br>
+        모든 꿀을 모아 집으로 돌아가야 한다면, 이 문제의 현재 상태와 목표 상태를 적어볼까요?</p>
+      <div class="input-box">
+        <label>현재 상태:</label><br>
+        <textarea rows="3" cols="80" placeholder="힌트: 현재 상태는 문제가 해결되지 않은 상태 입니다."></textarea>
+      </div>
+      <div class="input-box">
+        <label>목표 상태:</label><br>
+        <textarea rows="3" cols="80" placeholder="힌트: 목표 상태는 문제가 모두 해결된 상태 입니다."></textarea>
+      </div>
+      <button onclick="checkDecomposeAnswer()">제출하기</button>
+      <div id="decompose-feedback" class="feedback"></div>
+    </div>
+
+    <!-- 추상화 -->
+    <div id="abstraction" class="tab-content">
+      <h3>추상화 단계</h3>
+      <p>다음 중 불필요한 요소를 제거하고 핵심만 추출하는 문제입니다. 아래의 선지 중 문제를 해결할 때, 불필요한 요소를 선택하세요.</p>
+      <ul id="abstraction-list">
+        <li><input type="checkbox" value="1"> 각 칸의 배경색</li>
+        <li><input type="checkbox" value="2"> 꿀벌의 이동 방향</li>
+        <li><input type="checkbox" value="3"> 꿀의 양</li>
+        <li><input type="checkbox" value="4"> 꿀벌 이름</li>
+        <li><input type="checkbox" value="5"> FINISH 위치</li>
+      </ul>
+      <button onclick="checkAbstractionAnswer()">제출하기</button>
+      <div id="abstraction-feedback" class="feedback"></div>
+    </div>
+
+    <!-- 패턴 인식 -->
+    <div id="pattern" class="tab-content">
+      <h3>패턴 인식 단계</h3>
+      <p>아래 그림은 꿀벌이 특정 지점에서 출발해 FINISH까지 도달하는 경로를 나타낸 것입니다.<br>
+      경로에서 반복되는 패턴을 찾아보세요.</p>
+      <div class="example-grid">
+        <div class="pattern-grid">
+          <div class="pattern-cell">→1</div>
+          <div class="pattern-cell">↓1</div>
+          <div class="pattern-cell">→1</div>
+          <div class="pattern-cell">↓1</div>
+          <div class="pattern-cell">FINISH</div>
+        </div>
+      </div>
+      <ul id="pattern-choices">
+        <li><input type="radio" name="patternAnswer" value="1"> → </li>
+        <li><input type="radio" name="patternAnswer" value="2"> ↓ → </li>
+        <li><input type="radio" name="patternAnswer" value="3"> → ↓ </li>
+        <li><input type="radio" name="patternAnswer" value="4"> ↓ </li>
+      </ul>
+      <button onclick="checkPatternAnswer()">제출하기</button>
+      <div id="pattern-feedback" class="feedback"></div>
+    </div>
+
+    <!-- 알고리즘 적용 -->
+    <div id="algorithm" class="tab-content">
+      <h3>알고리즘 적용 단계</h3>
+      <p>꿀벌이 모든 꽃(🍯)에서 꿀을 수집하고 FINISH 지점에 도달할 수 있도록 시작지점을 골라보세요.</p>
+      <div class="problem-box">
+        <strong>규칙:</strong><br>
+        - 칸에는 이동 방향과 칸 수가 적혀 있습니다.<br>
+        - 🍯는 꽃이며, 처음 도착했을 때만 꿀을 수집할 수 있습니다.<br>
+        - 꽃칸은 도착 시 안내된 방향·칸 수를 따라 다시 이동합니다.<br>
+        - 모든 꿀을 수집한 후 FINISH에 도달해야 정답입니다.
+      </div>
+      <div class="grid-wrapper" id="grid-wrapper"></div>
+      <div class="choice-section">
+        <strong>어디서 시작해야 모든 꿀을 모을 수 있을까요?</strong><br>
+        <label><input type="radio" name="startChoice" value="1"> 시작지점 1 (R1C1)</label>
+        <label><input type="radio" name="startChoice" value="2"> 시작지점 2 (R1C2)</label>
+        <label><input type="radio" name="startChoice" value="3"> 시작지점 3 (R2C1)</label>
+        <label><input type="radio" name="startChoice" value="4"> 시작지점 4 (R3C1)</label>
+        <button onclick="submitAnswer()">제출하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 탭 전환 기능
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-tab');
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(targetId).classList.add('active');
+        if (targetId === 'algorithm') generateGrid();
+      });
+    });
+
+    function checkDecomposeAnswer() {
+      const current = document.querySelectorAll('#decompose textarea')[0].value.trim();
+      const goal = document.querySelectorAll('#decompose textarea')[1].value.trim();
+      const feedback = document.getElementById('decompose-feedback');
+      if (current && goal) {
+        feedback.textContent = '좋아요! 현재 상태와 목표 상태를 모두 잘 작성했어요.';
+      } else {
+        feedback.textContent = '현재 상태와 목표 상태를 모두 작성해주세요.';
+      }
+    }
+
+    function checkAbstractionAnswer() {
+      const selected = Array.from(document.querySelectorAll('#abstraction-list input:checked')).map(cb => cb.value);
+      const correct = ['1', '4'];
+      const isCorrect = correct.every(val => selected.includes(val)) && selected.length === correct.length;
+      document.getElementById('abstraction-feedback').textContent = isCorrect ? '정답입니다! 불필요한 정보만 잘 골랐어요.' : '오답입니다. 다시 생각해보세요.';
+    }
+
+    function checkPatternAnswer() {
+      const selected = document.querySelector('input[name="patternAnswer"]:checked');
+      const feedback = document.getElementById('pattern-feedback');
+      if (!selected) {
+        alert('반복 패턴을 선택해주세요.');
+        return;
+      }
+      feedback.textContent = (selected.value === '3')
+        ? '정답입니다! → ↓ 패턴이 반복됩니다.'
+        : '오답입니다. 그림을 다시 살펴보세요.';
+    }
+
+    function generateGrid() {
+      const gridWrapper = document.getElementById('grid-wrapper');
+      gridWrapper.innerHTML = '';
+
+      const presetGrid = [
+        ['→1', '🍯(↓1)', '→1', '↓3'],
+        ['→2', '🍯(↓2)', '↓1', '→1'],
+        ['→1', '↓1', '→1', '→1'],
+        ['→1', '→1', '→1', 'FINISH'],
+      ];
+
+      for (let row = 0; row < 4; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'grid-row';
+
+        const indexLabel = document.createElement('div');
+        indexLabel.className = 'start-index';
+        indexLabel.textContent = `R${row + 1}`;
+        rowDiv.appendChild(indexLabel);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+
+        for (let col = 0; col < 4; col++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.textContent = presetGrid[row][col];
+          grid.appendChild(cell);
+        }
+
+        rowDiv.appendChild(grid);
+        gridWrapper.appendChild(rowDiv);
+      }
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="startChoice"]:checked');
+      if (!selected) {
+        alert('시작 지점을 선택해주세요.');
+        return;
+      }
+      const answer = selected.value;
+      if (answer === '1') {
+        alert('정답입니다! 모든 꽃에서 꿀을 모은 후 FINISH에 도달했습니다. 🎉');
+      } else {
+        alert('오답입니다. 다시 경로를 추적해보세요!');
+      }
+    }
+  </script>
+</body>
+</html>
