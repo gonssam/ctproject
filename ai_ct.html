@@ -1,517 +1,74 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <title>스마트 라이프 어시스턴트 – 실생활 속 상황에 맞는 AI 행동 추천 시스템</title>
+  <title>스마트 라이프 어시스턴트 소개</title>
   <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; }
-
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .tabs {
-      display: flex;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-
-    .tab {
-      padding: 10px 20px;
-      border: 1px solid #ccc;
-      cursor: pointer;
-      flex: 1 1 auto;
-      text-align: center;
-    }
-
-    .tab.active {
-      background-color: #eef;
-      font-weight: bold;
-    }
-
-    .tab-content {
-      display: none;
-      border: 1px solid #ccc;
-      padding: 20px;
-      background-color: #f9f9f9;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .input-box {
-      margin-top: 15px;
-    }
-
-    textarea,
-    input[type=text],
-    select {
-      width: 100%;
-      max-width: 100%;
-      padding: 5px;
-      margin-top: 5px;
-      box-sizing: border-box;
-    }
-
-    .feedback {
-      margin-top: 10px;
-      font-weight: bold;
-      color: #003366;
-    }
-
-    pre.code {
-      background-color: #eee;
-      padding: 10px;
-      font-family: monospace;
-      white-space: pre-wrap;
-    }
-
-    .summary {
-      background-color: #eef;
-      padding: 10px;
-      margin-top: 10px;
-      white-space: pre-wrap;
-      border-left: 4px solid #99c;
-    }
-
-    .problem-box {
-      background-color: #fff7e6;
-      border-left: 5px solid #ff9900;
-      padding: 15px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      font-size: 16px;
+    body {
+      font-family: 'Arial', sans-serif;
       line-height: 1.6;
+      margin: 30px;
+      background-color: #f9f9f9;
+      color: #333;
     }
-
-    #algorithm {
-      max-height: 400px;
-      overflow-y: auto;
-      padding-right: 10px;
+    h2 {
+      color: #1a73e8;
     }
-
-    #algorithmInputs {
-      max-height: 300px;
-      overflow-y: auto;
-      padding-right: 10px;
-      margin-top: 10px;
-      background-color: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+    h3 {
+      margin-top: 40px;
+      color: #444;
     }
-
-    /* ✅ 모바일 반응형 스타일 추가 */
-    @media screen and (max-width: 768px) {
-      .tabs {
-        flex-direction: column;
-      }
-
-      .tab {
-        font-size: 14px;
-        padding: 8px;
-      }
-
-      .tab-content {
-        padding: 15px;
-      }
-
-      .problem-box {
-        font-size: 15px;
-      }
-
-      #algorithm, #algorithmInputs {
-        max-height: none;
-        overflow-y: visible;
-      }
+    ul {
+      padding-left: 20px;
+    }
+    a.button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: #1a73e8;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+    a.button:hover {
+      background-color: #0d5bd6;
     }
   </style>
-
 </head>
 <body>
-  <div class="container">
-    <h1>스마트 라이프 어시스턴트 – 실생활 속 상황에 맞는 AI 행동 추천 시스템</h1>
-    <div class="tabs">
-      <div class="tab active" data-tab="decompose">1. 문제 정의</div>
-      <div class="tab" data-tab="states">2. 데이터 수집</div>
-      <div class="tab" data-tab="pattern">3. 패턴 찾기</div>
-      <div class="tab" data-tab="abstract">4. 추상화하기</div>
-      <div class="tab" data-tab="algorithm">5. 알고리즘 표현</div>
-      <div class="tab" data-tab="automation">6. 자동화 및 디버깅</div>
-      <div class="tab" data-tab="summary">7. 나의 AI 설계 요약</div>
-    </div>
 
-    <div id="decompose" class="tab-content active">
-      <h3>1. 문제 정의</h3>
-      <p>아래 비버의 이야기를 읽고 비버의 현재 상태와 목표 상태를 적어볼까요?<br>
-      <div class="problem-box">
-      비버는 활발하고 호기심 많은 친구예요. 하고 싶은 게 너무 많아서 계획을 세우지 않고 즉흥적으로 움직이곤 해요.<br>
-      어느 날은 아침에 일어나자마자 갑자기 춤을 추다가 학교에 지각하고 또 어떤 날은 해야 할 숙제가 있었는데 무슨 과제였는지 기억도 못한 채 게임을 하다가 밤을 새웠어요. 기분이 좋아서 괜히 밖으로 나갔다가 에너지가 바닥나버리기도 하고, 기분이 나빠서 아무것도 안 하고 하루 종일 빈둥거린 적도 많았어요.<br>
-      이런 비버의 삶은 어지럽고, 해야 할 일들이 점점 쌓였어요. 무엇을 언제 해야 하는지 모르겠고, 지금 내 기분이나 에너지 상태에 맞는 행동이 뭔지도 잘 모르겠어요.<br>
-      나의 상황을 보고 해야 할 일을 추천해주는 AI가 있으면 어떨까요?</p>
-      
-      </div>
-      <div class="input-box">
-        <label><strong>현재 상태:</strong></label>
-        <textarea id="currentState" rows="3" placeholder="힌트: 평소 비버의 행동은 어떤가요?"></textarea>
-      </div>
-      <div class="input-box">
-        <label><strong>목표 상태:</strong></label>
-        <textarea id="goalState" rows="3" placeholder="힌트: 이 AI가 개발된다면 어떨까요?"></textarea>
-      </div>
-      <button onclick="alert('제출되었습니다.')">제출하기</button>
-    </div>
+  <h2>🤖 스마트 라이프 어시스턴트 체험하기</h2>
 
-    <div id="states" class="tab-content">
-      <h3>2. 데이터 수집</h3>
-      <p>상황을 요소별로 나누어 데이터를 수집합니다.<br>
-      사용자가 입력한 데이터를 학습(input)하여 AI가 추천행동(output)을 제시합니다.</p>
+  <h3>🔍 어떤 활동인가요?</h3>
+  <p>
+    이 활동은 여러분이 직접 상태를 입력하면, AI가 상황에 맞는 행동을 추천해주는 프로젝트입니다.
+    여러분은 AI처럼 데이터를 수집하고, 패턴을 분석하고, 조건을 표현하여 <strong>스스로 문제 해결자</strong>가 되어봅니다.
+  </p>
 
-      <div class="input-box">
-        <label><strong>시간대:</strong></label>
-        <input type="text" id="inputTime" placeholder="예: 오전, 오후, 밤 등">
-      </div>
-      <div class="input-box">
-        <label><strong>기분:</strong></label>
-        <input type="text" id="inputMood" placeholder="예: 기쁨, 피곤, 무기력 등">
-      </div>
-      <div class="input-box">
-        <label><strong>에너지 상태:</strong></label>
-        <input type="text" id="inputEnergy" placeholder="예: 높음, 보통, 낮음">
-      </div>
-      <div class="input-box">
-        <label><strong>행동:</strong></label>
-        <input type="text" id="inputAction" placeholder="예: 낮잠 자기, 산책하기 등">
-      </div>
-
-      <button onclick="saveInputData()">제출하기</button>  
-    </div>
-
-
-    <div id="pattern" class="tab-content">
-      <h3>3. 규칙(반복) 패턴 찾기</h3>      
-      <p><strong>패턴 트리로 보기</strong><br>수집 데이터를 트리로 보고 패턴을 찾아봅시다.</p>
-      <button onclick="generatePatternTreeFromCollected()">2단계 입력 기반 트리 보기</button>
-      <div id="patternTreeResult" class="summary" style="margin-top: 15px;"></div>
-
-    </div>
-
-
-    <div id="abstract" class="tab-content">
-      <h3>4. 추상화하기</h3>
-      <p>아래는 이전 단계에서 입력한 데이터입니다. 유사한 항목끼리 묶어보세요!</p>
-      <button onclick="showCollectedData()">입력 데이터 보기</button>
-      <div id="abstractRawData" class="summary" style="margin-top: 10px;"></div>
-      
-      <div class="input-box">
-        <label>시간대:</label>
-        <input type="text" id="abstractTime" placeholder="예: 11시>오전, 15시>오후">
-      </div>
-      <div class="input-box">
-        <label>기분:</label>
-        <input type="text" id="abstractMood" placeholder="예: 상쾌함>긍정, 피곤함>부정">
-      </div>
-      <div class="input-box">
-        <label>에너지 상태:</label>
-        <input type="text" id="abstractEnergy" placeholder="예: 높음, 낮음, 보통">
-      </div>
-      <div class="input-box">
-        <label>행동 범주:</label>
-        <input type="text" id="abstractAction" placeholder="예: 스마트폰하기>휴식, 달리기>운동">
-      </div>
-      <button onclick="alert('제출되었습니다.')">제출하기</button>
-    </div>
-
-    <div id="algorithm" class="tab-content">
-      <h3>5. 알고리즘 표현하기</h3>
-      <p>조건에 따라 AI가 추천할 행동을 <code>if</code> 문으로 표현해보세요.<br>아래 구조에 따라 구문을 직접 조립해보세요.</p>
-
-      <div class="summary" style="background-color: #eef;">
-        <strong>예시 1:</strong>  
-        if 기분 == '피곤함' and 에너지 == '낮음':<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;추천 = '낮잠 자기'<br><br>
-        <strong>예시 2:</strong>  
-        if 시간대 == '오전' and 에너지 == '높음':<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;추천 = '과제 하기'
-      </div>
-
-      <div id="algorithmInputs">
-        <h4 style="margin-top: 20px;">나의 조건 구성</h4>
-
-        <div class="input-box">
-          <label>조건 1 (예: 기분):</label>
-          <input type="text" id="cond1Key" placeholder="예: 기분">
-          <select id="cond1Op">
-            <option value="==">==</option>
-            <option value="!=">!=</option>
-          </select>
-          <input type="text" id="cond1Val" placeholder="예: 피곤함">
-        </div>
-
-        <div class="input-box">
-          <label>조건 2 (예: 에너지):</label>
-          <input type="text" id="cond2Key" placeholder="예: 에너지">
-          <select id="cond2Op">
-            <option value="==">==</option>
-            <option value="!=">!=</option>
-          </select>
-          <input type="text" id="cond2Val" placeholder="예: 낮음">
-        </div>
-
-        <div class="input-box">
-          <label>추천 행동:</label>
-          <input type="text" id="recommendAction" placeholder="예: 낮잠 자기">
-        </div>
-
-        <button onclick="generateAlgorithm()">if 문 생성하기</button>
-        <div class="summary" id="generatedAlgorithm" style="margin-top: 15px;"></div>
-      </div>
-      <!-- 숨겨진 영역 (또는 보이도록 설정 가능) -->
-      <textarea id="userAlgorithm" style="display: none;"></textarea>
-    </div>
-
-    <div id="automation" class="tab-content">
-      <h3>6. 자동화 및 디버깅</h3>
-      <p>AI가 추천을 잘하고 있는지 확인해보세요.<br>
-      아래 입력값에 따라 학생이 작성한 조건문을 순차적으로 적용하여 추천 행동을 출력합니다.</p>
-
-      <div class="input-box">
-        <label>상황 입력 (예: 기분=피곤함, 에너지=낮음):</label>
-        <input type="text" id="situationInput" placeholder="예: 기분=피곤함, 에너지=낮음">
-      </div>
-      <button onclick="simulateAI()">AI 추천 실행</button>
-
-      <div class="feedback" id="aiOutput"></div>
-
-      <div class="input-box">
-        <label>이 추천이 도움이 되었나요? 왜 그런가요?</label>
-        <textarea id="debugReflection" rows="3" placeholder="자기 평가 및 디버깅 의견 작성"></textarea>
-      </div>
-      <button onclick="alert('제출되었습니다.')">제출하기</button>
-    </div>
-
-
-    <div id="summary" class="tab-content">
-      <h3>7. 나의 AI 설계 요약</h3>
-      <p>지금까지 작성한 내용을 요약해서 확인해보세요.</p>
-      <button onclick="generateSummary()">요약 보기</button>
-      <div id="summaryContent" class="summary"></div>
-    </div>
+  <h3>📘 이 활동을 더 잘하려면, AI에 대해 이것만은 알고 가자!</h3>
+  <ul>
+    <li><strong>AI는 데이터를 통해 학습</strong>합니다. 다양한 경험이 쌓일수록 더 똑똑해져요.</li>
+    <li><strong>입력 정보(시간, 기분, 에너지 등)는 핵심 변수</strong>입니다. 잘 나누어 표현하는 것이 중요해요.</li>
+    <li><strong>AI는 확률적인 판단</strong>을 해요. 즉, 정답보다는 ‘가능성이 높은 선택’을 해요.</li>
+    <li>AI가 실수했다면, <strong>데이터가 부족하거나 예외 상황</strong일 수 있어요.</li>
+    <li><strong>데이터가 많을수록 성능이 좋아지지만, 한계도 있어요.</strong> 이를 학습 곡선이라 해요.</li>
+  </ul>
+  
+  <h3>🎥 영상으로 활동 개요 보기</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; margin-bottom:20px;">
+    <iframe 
+      src="https://www.youtube.com/embed/jPs3n9Vou9c" 
+      frameborder="0" 
+      allowfullscreen 
+      style="position:absolute; top:0; left:0; width:100%; height:100%;">
+    </iframe>
   </div>
 
-  <script>
-    const collectedData = [];
+  <h3>🚀 활동 시작</h3>
+  <p>
+    이제 아래 버튼을 클릭하여 실제로 AI 추천 시스템을 체험해보세요!
+  </p>
+  <a class="button" href="/run" target="_blank">👉 AI 추천 활동 바로가기</a>
 
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const targetId = tab.getAttribute('data-tab');
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(targetId).classList.add('active');
-      });
-    });
-
-  function generatePatternTreeFromCollected() {
-    if (collectedData.length === 0) {
-      document.getElementById('patternTreeResult').innerHTML = '⚠️ 2단계에서 데이터를 먼저 입력해주세요.';
-      return;
-    }
-
-    // 트리 구조 생성
-    const tree = {};
-    collectedData.forEach(d => {
-      if (!tree[d.시간대]) tree[d.시간대] = {};
-      if (!tree[d.시간대][d.에너지]) tree[d.시간대][d.에너지] = {};
-      tree[d.시간대][d.에너지][d.기분] = d.행동;
-    });
-
-    // HTML 트리 생성
-    let html = '<ul>';
-    for (const 시간대 in tree) {
-      html += `<li><strong>${시간대}</strong><ul>`;
-      for (const 에너지 in tree[시간대]) {
-        html += `<li>${에너지}<ul>`;
-        for (const 기분 in tree[시간대][에너지]) {
-          const 행동 = tree[시간대][에너지][기분];
-          const color = getColorForAction(행동);
-          html += `<li>${기분} → <span style="color:${color}; font-weight:bold">${행동}</span></li>`;
-        }
-      html += '</ul></li>';
-      }
-      html += '</ul></li>';
-    }
-    html += '</ul>';
-    document.getElementById('patternTreeResult').innerHTML = html;
-  }
-
-  function showCollectedData() {
-    const container = document.getElementById('abstractRawData');
-    if (collectedData.length === 0) {
-      container.textContent = '⚠️ 아직 수집된 데이터가 없습니다. 2단계에서 먼저 입력해주세요.';
-      return;
-    }
-
-    let html = '🧾 수집된 데이터 목록:\n\n';
-    collectedData.forEach((d, i) => {
-      html += `${i + 1}. 시간대: ${d.시간대}, 기분: ${d.기분}, 에너지: ${d.에너지}, 행동: ${d.행동}\n`;
-    });
-
-    container.textContent = html;
-  }
-
-
-  function saveInputData() {
-    const time = document.getElementById('inputTime').value.trim();
-    const mood = document.getElementById('inputMood').value.trim();
-    const energy = document.getElementById('inputEnergy').value.trim();
-    const action = document.getElementById('inputAction').value.trim();
-
-    if (!time || !mood || !energy || !action) {
-      alert("모든 항목을 입력해주세요.");
-      return;
-    }
-
-    collectedData.push({
-      시간대: time,
-      기분: mood,
-      에너지: energy,
-      행동: action
-    });
-
-    alert('제출되었습니다!');
-    // 입력값 초기화
-    document.getElementById('inputTime').value = '';
-    document.getElementById('inputMood').value = '';
-    document.getElementById('inputEnergy').value = '';
-    document.getElementById('inputAction').value = '';
-  }
-
-
-    const tree = {};
-    data.forEach(d => {
-      if (!tree[d.시간대]) tree[d.시간대] = {};
-      if (!tree[d.시간대][d.에너지]) tree[d.시간대][d.에너지] = {};
-      tree[d.시간대][d.에너지][d.기분] = d.행동;
-    });
-
-    let html = '<ul>';
-    for (const 시간대 in tree) {
-      html += `<li><strong>${시간대}</strong><ul>`;
-      for (const 에너지 in tree[시간대]) {
-        html += `<li>${에너지}<ul>`;
-        for (const 기분 in tree[시간대][에너지]) {
-          const 행동 = tree[시간대][에너지][기분];
-          const color = getColorForAction(행동);
-          html += `<li>${기분} → <span style="color:${color}; font-weight:bold">${행동}</span></li>`;
-        }
-        html += '</ul></li>';
-      }
-      html += '</ul></li>';
-    }
-    html += '</ul>';
-    document.getElementById('patternTreeResult').innerHTML = html;
-
-  function getColorForAction(action) {
-    const map = {
-      '과제 하기': '#1E90FF',
-      '낮잠 자기': '#FFA500',
-      '산책하기': '#228B22',
-      '게임': '#8A2BE2',
-      '운동': '#DC143C',
-      '쉬기': '#708090'
-    };
-    return map[action] || '#333';
-  }
-
-  function generateAlgorithm() {
-    const key1 = document.getElementById('cond1Key').value.trim();
-    const op1 = document.getElementById('cond1Op').value;
-    const val1 = document.getElementById('cond1Val').value.trim();
-
-    const key2 = document.getElementById('cond2Key').value.trim();
-    const op2 = document.getElementById('cond2Op').value;
-    const val2 = document.getElementById('cond2Val').value.trim();
-
-    const action = document.getElementById('recommendAction').value.trim();
-    const display = document.getElementById('generatedAlgorithm');
-
-    if (!key1 || !val1 || !key2 || !val2 || !action) {
-      display.textContent = '모든 항목을 입력해주세요.';
-      return;
-    }
-
-    const code = `if ${key1} ${op1} '${val1}' and ${key2} ${op2} '${val2}':\n  추천 = '${action}'`;
-    display.textContent = code;
-    document.getElementById('userAlgorithm').value = code;
-  }
-
-  function simulateAI() {
-    const inputText = document.getElementById('situationInput').value;
-    const outputBox = document.getElementById('aiOutput');
-
-    if (!inputText) {
-      outputBox.textContent = '❗ 상황을 입력해주세요.';
-      return;
-    }
-
-    const conditions = {};
-    inputText.split(',').forEach(pair => {
-      const [key, value] = pair.split('=').map(x => x.trim());
-      if (key && value) conditions[key] = value;
-    });
-
-    // 간단한 규칙 기반 추천
-    const 기분 = conditions['기분'];
-    const 에너지 = conditions['에너지'];
-
-    let 추천 = '🤔 아직 추천할 행동을 찾지 못했어요.';
-
-    if (기분 === '피곤함' && 에너지 === '낮음') {
-      추천 = '😴 잠시 잠을 청하면 어떨까요?';
-    } else if (기분 === '기쁨' && 에너지 === '높음') {
-      추천 = '💪 에너지가 넘치네요! 과제를 해보면 어때요?';
-    } else if (기분 === '무기력' && 에너지 === '보통') {
-      추천 = '🚶 산책을 하면서 기분을 전환해볼까요?';
-    }
-
-    outputBox.textContent = `✅ AI 추천: ${추천}`;
-  }
-
-  function generateSummary() {
-    const summary = `🧠 문제 정의:
-  현재 상태: ${document.getElementById('currentState').value}
-  목표 상태: ${document.getElementById('goalState').value}
-
-  📊 수집된 데이터 (예시 하나만 표시):
-  ${collectedData.length > 0 ? 
-    `시간대: ${collectedData[0].시간대}, 기분: ${collectedData[0].기분}, 에너지: ${collectedData[0].에너지}, 행동: ${collectedData[0].행동}`
-    : '데이터가 아직 없습니다.'}
-
-  🧩 추상화:
-  시간대: ${document.getElementById('abstractTime').value}
-  기분: ${document.getElementById('abstractMood').value}
-  에너지: ${document.getElementById('abstractEnergy').value}
-  행동 범주: ${document.getElementById('abstractAction').value}
-
-  💡 알고리즘:
-  ${document.getElementById('userAlgorithm').value}
-
-  🧪 디버깅 소감:
-  ${document.getElementById('debugReflection').value}
-  `;
-
-  document.getElementById('summaryContent').textContent = summary;
-  }
-
-  
-
-  </script>
 </body>
 </html>
