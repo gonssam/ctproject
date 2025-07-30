@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import platform
+import os
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.preprocessing import LabelEncoder
@@ -32,7 +35,7 @@ with tabs[0]:
     st.header("1. 문제 정의")
     st.markdown(
         '''
-        <div style='background-color:#fff7e6; border-left:5px solid #ff9900; padding:15px; border-radius:8px'>
+        <div style='background-color:#fff7e6; border-left:5px solid #ff9900; color:#333 padding:15px; border-radius:8px'>
         비버는 활발하고 호기심 많은 친구예요. 하고 싶은 게 너무 많아서 계획을 세우지 않고 즉흥적으로 움직이곤 해요.<br><br>
         어느 날은 아침에 일어나자마자 갑자기 춤을 추다가 학교에 지각하고, 또 어떤 날은 해야 할 숙제가 있었는데 무슨 과제였는지 기억도 못한 채 게임을 하다가 밤을 새웠어요.<br><br>
         기분이 좋아서 괜히 밖으로 나갔다가 에너지가 바닥나버리기도 하고, 기분이 나빠서 아무것도 안 하고 하루 종일 빈둥거린 적도 많았어요.<br><br>
@@ -201,23 +204,40 @@ with tabs[7]:
 
     st.markdown("## 🤖 AI는 데이터를 어떻게 학습할까요?")
    
-    # ✅ 한글 폰트 설정 (Windows)
-    matplotlib.rcParams['font.family'] = 'Malgun Gothic'
-    matplotlib.rcParams['axes.unicode_minus'] = False
+    # ✅ 한글 폰트 자동 설정 (Windows / macOS / Linux 포함)
+    def set_korean_font():
+        system = platform.system()
+        try:
+            if system == 'Windows':
+                matplotlib.rcParams['font.family'] = 'Malgun Gothic'
+            elif system == 'Darwin':  # macOS
+                matplotlib.rcParams['font.family'] = 'AppleGothic'
+            else:  # Linux or Streamlit Cloud
+                nanum_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+                if os.path.exists(nanum_path):
+                    font_name = fm.FontProperties(fname=nanum_path).get_name()
+                    matplotlib.rcParams['font.family'] = font_name
+                else:
+                    matplotlib.rcParams['font.family'] = 'DejaVu Sans'  # fallback
+            matplotlib.rcParams['axes.unicode_minus'] = False
+        except Exception as e:
+            st.warning(f"폰트 설정 실패: {e}")
 
-    # 데이터 생성
+    set_korean_font()
+
+    # ✅ 데이터 생성
     data_size = np.linspace(10, 1000, 100)
     accuracy = 1 - np.exp(-data_size / 200)
 
-    # 그래프 생성
-    fig, ax = plt.subplots(figsize=(5,3))
+    # ✅ 그래프 생성
+    fig, ax = plt.subplots(figsize=(6, 4))
     ax.plot(data_size, accuracy, color='blue', linewidth=2)
     ax.set_title("AI 학습 곡선 예시")
     ax.set_xlabel("데이터 개수")
     ax.set_ylabel("예측 정확도")
     ax.grid(True)
 
-    # Streamlit 출력
+    # ✅ Streamlit 출력
     st.pyplot(fig)
 
     ai_q = st.radio("데이터가 많아지면 AI는 어떻게 달라질까요?", [
